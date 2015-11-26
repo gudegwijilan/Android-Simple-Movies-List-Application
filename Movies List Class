@@ -1,0 +1,47 @@
+package com.example.nayyapradana.myapplication;
+
+/**
+ * Created by Nayya Pradana on 25/11/2015.
+ */
+
+import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class MoviesList extends ArrayAdapter<String>
+{
+    private final Activity context;
+    private final String[] movieName;
+    private final String[] movieDesc;
+    private final Integer[] imgName;
+
+    public MoviesList(Activity context, String[] movieName, String[] movieDesc, Integer[] imgName)
+    {
+        super(context, R.layout.list_row, movieName);
+
+        this.context=context;
+        this.movieName=movieName;
+        this.movieDesc=movieDesc;
+        this.imgName=imgName;
+    }
+    
+    //find the position of the array and put it in a list
+    public View getView(int position,View view,ViewGroup parent)
+    {
+        LayoutInflater inflater = context.getLayoutInflater();
+        View rowView = inflater.inflate(R.layout.list_row, null, true);
+
+        TextView txtMovieTitle = (TextView) rowView.findViewById(R.id.txtTitle);
+        TextView txtMovieDescription = (TextView) rowView.findViewById(R.id.txtTitle2);
+        ImageView imgMov = (ImageView) rowView.findViewById(R.id.imgMovie);
+
+        txtMovieTitle.setText(movieName[position]);
+        imgMov.setImageResource(imgName[position]);
+        txtMovieDescription.setText(movieDesc[position]);
+        return rowView;
+    }
+}
