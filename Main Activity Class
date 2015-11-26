@@ -1,0 +1,135 @@
+package com.example.nayyapradana.myapplication;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TabHost;
+
+/**
+ * Some code was taken from:
+ * R.K.Kanojia. 2014. Android Custom Listview with Image and Text using ArrayAdapter.
+ * [ONLINE] Available at:
+ * http://www.androidinterview.com/android-custom-listview-with-image-and-text-using-arrayadapter/.
+ * [Accessed 26 November 15].
+ */
+
+public class MyActivity extends AppCompatActivity {
+
+
+    TabHost tabhost;
+    TabHost.TabSpec tabSpec;
+    ListView listMovies;
+    public final static String EXTRA_MESSAGE = "nayyapradana.MESSAGE";
+    /**
+     *Initial planning was to set up a database that contains the list of the movies,
+     *due to time constraints I created an array of strings insted
+     */
+    String[] movieName =
+            {
+                "Avex",
+                "Rezona Men",
+                "The Killer Syndrome",
+                "Satrio and his Chromosome",
+                "Gudeg Wijilian",
+                "UHU"
+            };
+    String[] movieDesc =
+            {
+                "Rating 5,3 (Sci-Fi, Adventure)",
+                "Rating 6,9 (Documentary)",
+                "Rating 7,5 (Horror)",
+                "Rating 4,4 (Thriller)",
+                "Rating 8,1 (Documentary)",
+                "Rating 9,3 (Action, Fantasy)"
+            };
+
+    Integer[] imgName =
+            {
+               R.drawable.avex,
+               R.drawable.rezona,
+               R.drawable.tks,
+               R.drawable.shc,
+               R.drawable.gudeg,
+               R.drawable.uhu
+            };
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //systemautocreate
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        //setting up tabs
+        tabhost = (TabHost) findViewById(R.id.tabHost);
+
+        tabhost.setup();
+        //movies list tab
+        tabSpec = tabhost.newTabSpec("ListMovies");
+        tabSpec.setContent(R.id.tabMovieList).setIndicator("Movies List");
+        tabhost.addTab(tabSpec);
+
+
+
+        //list adapter
+        MoviesList adapter = new MoviesList(this, movieName, movieDesc, imgName);
+        listMovies=(ListView)findViewById(R.id.listMovies);
+        listMovies.setAdapter(adapter);
+
+        listMovies.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                //user selection
+                Intent myIntent = new Intent(view.getContext(), Description.class);
+                startActivityForResult(myIntent, 0);
+                Integer num = position;
+                myIntent.putExtra(EXTRA_MESSAGE, num);
+                startActivity (myIntent);
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_my, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}
